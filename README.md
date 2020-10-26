@@ -1,43 +1,150 @@
-# **Microbe Address Book Assessment**
-### **Objective:**
-To engineer/build the backend for a theoretical company contact directory while utilizing technologies in Microbe Formula’s new backend tech stack.  These technologies include but are not limited to Node.js, Express.js, GraphQL and MySQL.
-### **Overview:**
-You will be building the backend for a simple address book.  Feel free to use the boilerplate code found in this repo or start your own from scratch.
-This repo has some basic packages installed for GQL and Express, see `package.json` for dependencies. 
+# Microbe Formulas Address Book Assessment
+This project represents the backend for a theoretical company contact directory that utilizes the following technologies from Microbe Formulas' new backend tech stack:
+- Node.js
+- Express.js
+- GraphQL
+- MySQL
 
-You will be required to use Node, Express and GraphQL in this project. Feel free to take your pick and use any relational database (SQL preferred) you feel comfortable with keeping in mind we use MySQL. Also feel free to use any additional npm libraries, frameworks or open source projects that will help you accomplish your goal.
+## Setup Project Locally
+```sh
+# Clone this project
+git clone (insert link)
 
-You will not need to create any frontend forms or components that users will interact with. Instead you will use GraphiQL to showcase the api and schema you have created.
+# Install project dependences
+npm install
+```
 
-The company contact directory will be simple and will require all CRUD actions on the contacts.  In addition contacts will need the following properties;
+This project requires a MySQL database. You can install MySQL for Linux, Mac, or Windows at <https://www.mysql.com/downloads/> and instructions for running a MySQL database locally (or on a server) can be found at <https://dev.mysql.com/doc/>.
 
-1.  Name
-2.  Role at Microbe Formulas
-3.  Email
-4.  Phone Number
+Once the MySQL server has been started, a new database and table need to be created. I recommend using MySQL Workbench for running the following SQL queries:
+```sql
+-- Creates a new database
+CREATE DATABASE address_book;
 
+-- Uses the database for the following queries
+USE address_book;
 
-Please implement testing when you see fit, you may utilize any testing library or testing method/methods.
+-- Creates a new database table
+CREATE TABLE persons (
+    id INT NOT NULL AUTO_INCREMENT,
+    firstName VARCHAR(64) NOT NULL,
+    lastName VARCHAR(64) NOT NULL,
+    email VARCHAR(128),
+    phone VARCHAR(15),
+    role VARCHAR(64) NOT NULL,
+    PRIMARY KEY (id)
+);
 
-The project does not need to be hosted (unless you would like to) but will require detailed documentation on how to get the project up and running locally.
+-- (Optional) Populate the table with example rows
+INSERT INTO persons (firstName, lastName, email, phone, role)
+VALUES ("Rhett", "Hancock", "hancockrhett@gmail.com", "2082832763", "Back End Developer");
 
-This project is not designed to be overly complex and should only take an hour or two.  We want to be respectful of your free time while adequately being able to determine your skill level and fit for the role.  We hope this project accomplishes that.  If you are the type to go above and beyond and feel like committing more time, want to tackle more difficult features, or finish up earlier than expected feel free to implement anything from the extras section.  This is not required or expected.  Feeling creative? Come up with a feature or improvement and implement it into this project.
-### **Extras:**
-In no specific order;
+INSERT INTO persons (firstName, lastName, email, phone, role)
+VALUES ("Michael", "Roberts", "michael.roberts@email.com", "2085556666", "Front End Developer");
 
-1.  User authentication - Not everyone should be able to use our company directory.  Allow the creation of a user account and log in.
-2.  Host the project - Get the project live on Heroku or another service!
-3.  Create a simple user interface - Are you a ‘Full Stack Developer’? Go for it!
-4.  Be Creative - Come up with something cool!
+INSERT INTO persons (firstName, lastName, email, phone, role)
+VALUES ("Alice", "Jones", "alice.jones@email.com", "2084564477", "Graphic Designer");
 
-### **Upon Completion:**
-Please turn in this project within the time frame given.  We would rather see what you have accomplished in the time frame than need extensions on the project.
+INSERT INTO persons (firstName, lastName, email, phone, role)
+VALUES ("Monica", "Alberts", "monicaalberts@email.com", "4025556666", "Data Analyst");
 
-Submit a link to your project’s GitHub repo and include a README with clear instructions on how to get your project up and running locally.  If you opted to host the project submit a link to where we can view it.  
+INSERT INTO persons (firstName, lastName, email, phone, role)
+VALUES ("Avery", "Johnson", "avery.jo@gmail.com", "2084459922", "Full-Stack Engineer");
+```
 
-In addition to this please include a short screen recording or project write up detailing your choices and design decisions.  In this recording/write up include things you may have done differently, changes you would make if you had more time, etc.
+Please note that these SQL queries can be found in sql/create.sql.
 
-We will be reviewing your submissions and be in contact.  We thank you for your interest and appreciate you committing your time to this project!
+Once the MySQL database is ready, the mysql-connector.js file needs to be updated with the parameters used to configure your MySQL database:
+- host
+- user
+- password
+- database
 
+Finally, the project is ready to be run and used:
+```sh
+# Run GraphQL server
+node index
 
-*Any questions? Email conor.souhrada@microbeformulas.com*
+# Access GraphiQL
+http://localhost:4000/graphql
+```
+
+## Example Operations
+### Get person by ID
+```js
+{
+  person(id: 1) {
+    id
+    firstName
+    lastName
+    email
+    phone
+    role
+  }
+}
+```
+### Get all persons
+```js
+{
+  persons {
+    id
+    firstName
+    lastName
+    email
+    phone
+    role
+  }
+}
+```
+### Get all persons name and role
+```js
+{
+  persons {
+    firstName
+    lastName
+    role
+  }
+}
+```
+### Create a new person
+```js
+mutation {
+  createPerson(
+    firstName: "John",
+    lastName: "Smith",
+    email: "john.smith@email.com",
+    phone: "2086667878"
+    role: "Back End Engineer"
+  ) {
+    id
+  }
+}
+```
+### Update a person
+```js
+mutation {
+  updatePerson(
+    id: 6
+    firstName: "John",
+    lastName: "Smith",
+    email: "john.smith24@email.com",
+    phone: "2086667878",
+    role: "Back End Engineer"
+  ) {
+    id
+    firstName
+    lastName
+    email
+    phone
+    role
+  }
+}
+```
+### Delete a person
+```js
+mutation {
+  deletePerson(id: 6) {
+    affectedRows
+  }
+}
+```
