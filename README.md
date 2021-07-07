@@ -37,7 +37,7 @@ CREATE TABLE persons (
 
 -- (Optional) Populate the table with example rows
 INSERT INTO persons (firstName, lastName, email, phone, role)
-VALUES ("Rhett", "Hancock", "hancockrhett@gmail.com", "2082832763", "Back End Developer");
+VALUES ("Rhett", "Hancock", "hancockrhett@email.com", "2081234567", "Back End Developer");
 
 INSERT INTO persons (firstName, lastName, email, phone, role)
 VALUES ("Michael", "Roberts", "michael.roberts@email.com", "2085556666", "Front End Developer");
